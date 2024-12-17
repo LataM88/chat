@@ -1,0 +1,54 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+.register {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    font-family: 'Poppins';
+    text-align: center;
+    gap: 8px;
+}
+
+.register h1 {
+    background: linear-gradient(267deg, rgb(111, 17, 199) 32%, rgb(31, 11, 51));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+}
+
+.register-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap: 16px;
+}
+
+.register-container input {
+    width: 300px;
+    padding: 20px;
+    border-radius: 40px;
+    border-color: blueviolet;
+}
+
+.register-submit {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+}
+
+.register-submit button {
+    width: 300px;
+    padding: 20px;
+    border-radius: 40px;
+    font-size: 16px;
+    border-color: blueviolet;
+}
+
+.register-submit button:hover {
+    transform: scale(1.1);
+    transition: 0.3s;
+}
