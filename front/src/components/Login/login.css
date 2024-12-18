@@ -2,7 +2,7 @@
 
 
 body {
-    background-image: url("../../../tlo.png");
+    background-image: url("../../../../tlo.png");
     background-size: cover; 
     background-position: center; 
     background-repeat: no-repeat; 
@@ -12,7 +12,7 @@ body {
     width: 100%; 
 }
 
-.register {
+.login {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -25,21 +25,21 @@ body {
     box-shadow: 0px 0px 40px rgb(31, 24, 24);
 }
 
-.register h1 {
+.login h1 {
     background: linear-gradient(50deg, rgb(31, 80, 159) 32%, rgb(0, 0, 74));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
     text-shadow: 1px 1px 1px rgb(0, 0, 74);;
 }
 
-.register p {
-    margin-bottom: 10px;
+.login p {
+    margin-top: 0;
     font-weight: 600;
 }
 
-.register-container {
+.login-container {
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -47,7 +47,7 @@ body {
     gap: 16px;
 }
 
-.register-container input {
+.login-container input {
     width: 300px;
     padding: 20px;
     border: 3px solid rgb(31, 80, 159);
@@ -55,26 +55,24 @@ body {
     font-size: 16px;
 }
 
-.register-submit {
+.login-submit {
     display: flex;
     align-items: center;
     flex-direction: column;
     text-align: center;
     font-weight: 600;
-    gap: 4px;
-    margin-top: 16px;
 }
 
-.register-submit button {
+.login-submit button {
     width: 300px;
     padding: 15px;
     border-radius: 40px;
-    font-size: 20px;
+    font-size: 16px;
     border: 3px solid rgb(31, 80, 159);
     cursor: pointer;
 }
 
-.register-submit button:hover {
+.login-submit button:hover {
     transform: scale(1.1);
     transition: 0.5s;
     background-color: rgb(31, 80, 159);
@@ -82,12 +80,12 @@ body {
     color: white;
 }
 
-.register-submit p {
-    margin-top: 0px;
-    margin-bottom: 0;
+.login-submit p {
+    margin-top: 16px;
+    margin-bottom: 0px;
 }
 
-.register-submit a {
+.login-submit a {
     text-decoration: none;
     color: rgb(31, 80, 159);
     display: inline;
@@ -96,6 +94,6 @@ body {
     font-size: 20px;
 }
 
-.register-submit a:hover {
+.login-submit a:hover {
     color: rgb(0, 0, 74);
 }
