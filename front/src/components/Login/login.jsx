@@ -6,7 +6,7 @@ const Login = () => {
     return (
         <div className="login">
             <h1>Welcome again</h1>
-            <p>It's nice to see you again<br />Come on, talk with ur friends</p>
+            <p>It's nice to see you again<br />Go on, talk with ur friends</p>
             <div className="login-container">
                 <input type="email" placeholder="Email" />
                 <input type="password" placeholder="Password "/>
