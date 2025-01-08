@@ -99,3 +99,13 @@ body {
 .register-submit a:hover {
     color: rgb(0, 0, 74);
 }
+
+.errors {
+    color: red;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: left;
+    width: 300px;
+    padding-right: 20px;
+    line-height: 1.0;
+}
