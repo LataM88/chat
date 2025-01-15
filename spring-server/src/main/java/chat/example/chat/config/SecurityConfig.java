@@ -16,11 +16,11 @@ import java.util.List;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // Konfiguracja CORS
+    // CORS configuration
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:3000")); // Upewnij się, że adres jest poprawny
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -29,16 +29,16 @@ public class SecurityConfig {
         return source;
     }
 
-    // Konfiguracja Spring Security
+    // Spring Security configuration
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Wyłącz CSRF na potrzeby testowania
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/api/register").permitAll() // Zezwól na dostęp do endpointu rejestracji
-                        .anyRequest().authenticated() // Pozostałe endpointy wymagają uwierzytelnienia
+                        .requestMatchers("/api/register").permitAll() // Allow access to endpoint registration
+                        .anyRequest().authenticated()
                 )
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())); // Przypisanie konfiguracji CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
         return http.build();
     }
 }
