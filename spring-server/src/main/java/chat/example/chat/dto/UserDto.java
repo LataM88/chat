@@ -5,7 +5,6 @@ public class UserDto {
     private String password;
     private String name;
 
-    // Gettery i settery
     public String getEmail() {
         return email;
     }
