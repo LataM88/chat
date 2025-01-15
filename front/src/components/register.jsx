@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import './register.css'
+import './register.css';
 import { Link } from "react-router-dom";
 
 const Register = () => {
@@ -8,13 +8,46 @@ const Register = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
+    const [successMessage, setSuccessMessage] = useState('');
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const errors = validate();
-        
+
         if (Object.keys(errors).length === 0) {
-            alert("Done");
+            try {
+                console.log("Request body:", {
+                    email,
+                    password,
+                    name: name + ' ' + last,
+                });
+
+                const response = await fetch('http://localhost:8080/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                        name: name + ' ' + last,
+                    }),
+                });
+
+                if (response.ok) {
+                    setSuccessMessage("Registration successful!");
+                    setTimeout(() => setSuccessMessage(''), 5000);  
+                } else {
+                    const errorText = await response.text();
+                    console.error("Server error:", errorText);
+                    setErrors({ firebase: [errorText] });
+                    setTimeout(() => setErrors({ firebase: [] }), 5000);  
+                }
+            } catch (error) {
+                console.error("Error during registration:", error);
+                setErrors({ firebase: [error.message] });
+                setTimeout(() => setErrors({ firebase: [] }), 5000);  
+            }
         } else {
             setErrors(errors);
         }
@@ -22,76 +55,30 @@ const Register = () => {
 
     const validate = () => {
         const error = {};
-    
-        // Last name validation
-        if (!last) {
-            error.last = ["Last name is required"];
-        } else {
-            const capitalizedLastName = last.charAt(0).toUpperCase() + last.slice(1);
-            if (last !== capitalizedLastName) {
-                error.last = error.last || [];
-                error.last.push("The first letter must be uppercase");
-            }
-            if (last.length < 2) {
-                error.last = error.last || [];
-                error.last.push("The last name must consist of at least two letters.");
-            }
-        }
-    
+
         // Name validation
         if (!name) {
             error.name = ["Name is required"];
-        } else {
-            const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
-            if (name !== capitalizedName) {
-                error.name = error.name || [];
-                error.name.push("The first letter must be uppercase");
-            }
-            if (name.length < 2) {
-                error.name = error.name || [];
-                error.name.push("The name must consist of at least two letters.");
-            }
         }
-    
+
+        // Last name validation
+        if (name && !last) {
+            error.last = ["Last name is required"];
+        }
+
         // Email validation
-        if (!email) {
+        if (name && last && !email) {
             error.email = ["Email is required"];
-        } else {
-            if (!email.includes('@')) {
-                error.email = error.email || [];
-                error.email.push("Email is invalid: missing '@'.");
-            }
-            if (!email.split('@')[1]) {
-                error.email = error.email || [];
-                error.email.push("Email is invalid: missing domain after '@'.");
-            }
-            if (!/\S+@\S+\.\S+/.test(email)) {
-                error.email = error.email || [];
-                error.email.push("Email format is incorrect.");
-            }
         }
-    
+
         // Password validation
-        if (!password) {
+        if (name && last && email && !password) {
             error.password = ["Password is required"];
-        } else {
-            if (password.length < 8) {
-                error.password = error.password || [];
-                error.password.push("Password must be at least 8 characters long.");
-            }
-            if (!/[A-Z]/.test(password)) {
-                error.password = error.password || [];
-                error.password.push("Password must include at least one uppercase letter.");
-            }
-            if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
-                error.password = error.password || [];
-                error.password.push("Password must include at least one special character.");
-            }
         }
-    
+
         return error;
     };
-    
+
     return (
         <div className="register">
             <h1>Welcome to our chat</h1>
@@ -134,6 +121,10 @@ const Register = () => {
                     {errors.password && errors.password.map((error, index) => (
                         <div key={index} className="errors">{error}</div>
                     ))}
+                    {errors.firebase && errors.firebase.map((error, index) => (
+                        <div key={index} className="errors-firebase">{error}</div>
+                    ))}
+                    {successMessage && <div className="success">{successMessage}</div>}
                 </div>
                 <div className="register-submit">
                     <p>Already have an account?</p>
