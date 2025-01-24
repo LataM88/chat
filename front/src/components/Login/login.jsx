@@ -1,18 +1,45 @@
 import React, { useState } from "react";
-import './login.css'
-import { Link } from "react-router-dom";
+import './login.css';
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [errors, setErrors] = useState({}); // Changed to an object
+    const [errors, setErrors] = useState({});
+    const [serverError, setServerError] = useState('');
+    const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
         const errors = validate();
-        setErrors(errors); // Set errors to the validation result
+        setErrors(errors);
+
         if (Object.keys(errors).length === 0) {
-            alert("Done");
+            try {
+                const response = await fetch('http://localhost:8080/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email,
+                        password,
+                    }),
+                });
+
+                if (response.ok) {
+                    setSuccessMessage("Login successful!");
+                    setTimeout(() => setSuccessMessage(''), 5000);
+                    navigate('/Chat'); 
+                } else {
+                    const errorText = await response.text();
+                    setServerError(errorText);
+                }
+            } catch (error) {
+                console.error("Error during login:", error);
+                setServerError(error.message);
+            }
         }
     };
 
@@ -22,19 +49,8 @@ const Login = () => {
         // Email validation
         if (!email) {
             error.email = ["Email is required"];
-        } else {
-            if (!email.includes('@')) {
-                error.email = error.email || [];
-                error.email.push("Email is invalid: missing '@'.");
-            }
-            if (!email.split('@')[1]) {
-                error.email = error.email || [];
-                error.email.push("Email is invalid: missing domain after '@'.");
-            }
-            if (!/\S+@\S+\.\S+/.test(email)) {
-                error.email = error.email || [];
-                error.email.push("Email format is incorrect.");
-            }
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            error.email = ["Invalid email format"];
         }
 
         // Password validation
@@ -61,7 +77,7 @@ const Login = () => {
     return (
         <div className="login">
             <h1>Welcome again</h1>
-            <p>It's nice to see you again<br />Go on, talk with ur friends</p>
+            <p>It's nice to see you again<br />Go on, talk with your friends</p>
             <form onSubmit={handleSubmit}>
                 <div className="login-container">
                     <input
@@ -82,6 +98,8 @@ const Login = () => {
                     {errors.password && errors.password.map((error, index) => (
                         <div key={index} className="error">{error}</div>
                     ))}
+                    {serverError && <div className="error">{serverError}</div>}
+                    {successMessage && <div className="success">{successMessage}</div>}
                 </div>
                 <div className="login-submit">
                     <p>Don't have an account?</p>
