@@ -32,4 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 
-spring-server/src/main/resources/firebase-key.json
+firebase-key.json
