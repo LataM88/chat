@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+spring-server/src/main/resources/firebase-key.json
+
 
 # testing
 /coverage
