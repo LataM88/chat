@@ -29,16 +29,21 @@ const Login = () => {
                 });
 
                 if (response.ok) {
-                    setSuccessMessage("Login successful!");
+                    const data = await response.json();
+                    const userId = data.userId; 
+
+                    localStorage.setItem("userId", userId);
+
+                    setSuccessMessage(data.message || "Login successful!");
                     setTimeout(() => setSuccessMessage(''), 5000);
-                    navigate('/Chat'); 
+                    navigate('/Chat');
                 } else {
-                    const errorText = await response.text();
-                    setServerError(errorText);
+                    const errorData = await response.json();
+                    setServerError(errorData.message || "An error occurred.");
                 }
             } catch (error) {
                 console.error("Error during login:", error);
-                setServerError(error.message);
+                setServerError("An unexpected error occurred.");
             }
         }
     };
@@ -112,3 +117,4 @@ const Login = () => {
 };
 
 export default Login;
+                     

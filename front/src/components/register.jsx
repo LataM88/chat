@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import './register.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -9,6 +9,7 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     const [successMessage, setSuccessMessage] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -35,8 +36,11 @@ const Register = () => {
                 });
 
                 if (response.ok) {
-                    setSuccessMessage("Registration successful!");
-                    setTimeout(() => setSuccessMessage(''), 5000);  
+                    setSuccessMessage("Registration successful!<br>Login in 3 sec");
+                    setTimeout(() => {
+                        navigate('/Login');  
+                    }, 3000)
+                     
                 } else {
                     const errorText = await response.text();
                     console.error("Server error:", errorText);
@@ -124,7 +128,12 @@ const Register = () => {
                     {errors.firebase && errors.firebase.map((error, index) => (
                         <div key={index} className="errors-firebase">{error}</div>
                     ))}
-                    {successMessage && <div className="success">{successMessage}</div>}
+                    {successMessage && (
+                        <div
+                            className="success"
+                            dangerouslySetInnerHTML={{ __html: successMessage }}
+                        ></div>
+                    )}
                 </div>
                 <div className="register-submit">
                     <p>Already have an account?</p>
