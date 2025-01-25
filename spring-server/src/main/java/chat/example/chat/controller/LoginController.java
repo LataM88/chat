@@ -6,25 +6,31 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import chat.example.chat.dto.LoginDto;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
 
     @PostMapping
-    public ResponseEntity<String> loginUser(@RequestBody LoginDto userDto) {
+    public ResponseEntity<Map<String, Object>> loginUser(@RequestBody LoginDto userDto) {
+        Map<String, Object> response = new HashMap<>();
         try {
-            // Weryfikacja użytkownika
             FirebaseAuth auth = FirebaseAuth.getInstance();
-            auth.getUserByEmail(userDto.getEmail()); // Sprawdzenie, czy użytkownik istnieje
+            var userRecord = auth.getUserByEmail(userDto.getEmail());
 
-            // Tu możesz użyć innej metody do obsługi tokenów JWT
-            return ResponseEntity.ok("Login successful");
+            response.put("message", "Login successful");
+            response.put("userId", userRecord.getUid());
+            return ResponseEntity.ok(response);
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-            return ResponseEntity.status(400).body("Invalid email or password");
+            response.put("message", "Invalid email or password");
+            return ResponseEntity.status(400).body(response);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.status(500).body("Internal server error");
+            response.put("message", "Internal server error");
+            return ResponseEntity.status(500).body(response);
         }
     }
 }
